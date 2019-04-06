@@ -35,8 +35,12 @@ type DemoPicker
 
 
 type alias Model =
-    { dates : Dict String Date -- The key is actually a DemoPicker
-    , datePickerState : Dict String DateTimePicker.State -- The key is actually a DemoPicker
+    { dates :
+        Dict String Date
+        -- The key is actually a DemoPicker
+    , datePickerState :
+        Dict String DateTimePicker.State
+        -- The key is actually a DemoPicker
     }
 
 
@@ -71,10 +75,10 @@ analogDateTimePickerConfig =
         defaultDateTimeConfig =
             defaultDateTimePickerConfig (DatePickerChanged AnalogDateTimePicker)
     in
-    { defaultDateTimeConfig
-        | timePickerType = DateTimePicker.Config.Analog
-        , allowYearNavigation = False
-    }
+        { defaultDateTimeConfig
+            | timePickerType = DateTimePicker.Config.Analog
+            , allowYearNavigation = False
+        }
 
 
 timePickerConfig : Config (CssConfig TimePickerConfig Msg DateTimePicker.SharedStyles.CssClasses) Msg
@@ -83,9 +87,9 @@ timePickerConfig =
         defaultDateTimeConfig =
             defaultTimePickerConfig (DatePickerChanged TimePicker)
     in
-    { defaultDateTimeConfig
-        | timePickerType = DateTimePicker.Config.Analog
-    }
+        { defaultDateTimeConfig
+            | timePickerType = DateTimePicker.Config.Analog
+        }
 
 
 noPickerConfig : Config (CssConfig (DatePickerConfig {}) Msg DateTimePicker.SharedStyles.CssClasses) Msg
@@ -94,10 +98,10 @@ noPickerConfig =
         defaultDateConfig =
             defaultDatePickerConfig (DatePickerChanged NoPicker)
     in
-    { defaultDateConfig
-        | usePicker = False
-        , attributes = [ class [ "Test" ] ]
-    }
+        { defaultDateConfig
+            | usePicker = False
+            , attributes = [ class [ "Test" ] ]
+        }
 
 
 customI18nConfig : Config (CssConfig (DatePickerConfig TimePickerConfig) Msg DateTimePicker.SharedStyles.CssClasses) Msg
@@ -106,11 +110,11 @@ customI18nConfig =
         defaultDateTimeConfig =
             defaultDateTimePickerConfig (DatePickerChanged CustomI18n)
     in
-    { defaultDateTimeConfig
-        | timePickerType = DateTimePicker.Config.Analog
-        , allowYearNavigation = False
-        , i18n = { defaultDateTimeI18n | inputFormat = customInputFormat }
-    }
+        { defaultDateTimeConfig
+            | timePickerType = DateTimePicker.Config.Analog
+            , allowYearNavigation = False
+            , i18n = { defaultDateTimeI18n | inputFormat = customInputFormat }
+        }
 
 
 customDatePattern : String
@@ -131,9 +135,9 @@ digitalDateTimePickerConfig =
         defaultDateTimeConfig =
             defaultDateTimePickerConfig (DatePickerChanged DigitalDateTimePicker)
     in
-    { defaultDateTimeConfig
-        | timePickerType = DateTimePicker.Config.Digital
-    }
+        { defaultDateTimeConfig
+            | timePickerType = DateTimePicker.Config.Digital
+        }
 
 
 digitalTimePickerConfig : Config (CssConfig TimePickerConfig Msg DateTimePicker.SharedStyles.CssClasses) Msg
@@ -142,9 +146,9 @@ digitalTimePickerConfig =
         defaultDateTimeConfig =
             defaultTimePickerConfig (DatePickerChanged TimePicker)
     in
-    { defaultDateTimeConfig
-        | timePickerType = DateTimePicker.Config.Digital
-    }
+        { defaultDateTimeConfig
+            | timePickerType = DateTimePicker.Config.Digital
+        }
 
 
 viewPicker : DemoPicker -> Maybe Date -> DateTimePicker.State -> Html Msg
@@ -190,26 +194,26 @@ view model =
             , NoPicker
             ]
     in
-    form []
-        [ Html.node "style" [] [ Html.text css ]
-        , allPickers
-            |> List.map
-                (\which ->
-                    viewPicker which
-                        (Dict.get (toString which) model.dates)
-                        (Dict.get (toString which) model.datePickerState |> Maybe.withDefault DateTimePicker.initialState)
-                )
-            |> div [ class [ Container ] ]
-        , h3 [] [ text "Selected values" ]
-        , p []
-            [ allPickers
+        form []
+            [ Html.node "style" [] [ Html.text css ]
+            , allPickers
                 |> List.map
                     (\which ->
-                        li [] [ text (toString which), text ": ", text <| toString <| Dict.get (toString which) model.dates ]
+                        viewPicker which
+                            (Dict.get (toString which) model.dates)
+                            (Dict.get (toString which) model.datePickerState |> Maybe.withDefault DateTimePicker.initialState)
                     )
-                |> ul []
+                |> div [ class [ Container ] ]
+            , h3 [] [ text "Selected values" ]
+            , p []
+                [ allPickers
+                    |> List.map
+                        (\which ->
+                            li [] [ text (toString which), text ": ", text <| toString <| Dict.get (toString which) model.dates ]
+                        )
+                    |> ul []
+                ]
             ]
-        ]
 
 
 type Msg

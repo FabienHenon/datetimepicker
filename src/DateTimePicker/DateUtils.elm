@@ -11,6 +11,8 @@ module DateTimePicker.DateUtils
         , toDate
         , toMillitary
         , toTime
+        , toTimeMilitary
+        , setTimeMilitary
         )
 
 import Date
@@ -45,27 +47,27 @@ dayToInt startOfWeek day =
                 Date.Sat ->
                     6
     in
-    case startOfWeek of
-        Date.Sun ->
-            base
+        case startOfWeek of
+            Date.Sun ->
+                base
 
-        Date.Mon ->
-            (base - 1) % 7
+            Date.Mon ->
+                (base - 1) % 7
 
-        Date.Tue ->
-            (base - 2) % 7
+            Date.Tue ->
+                (base - 2) % 7
 
-        Date.Wed ->
-            (base - 3) % 7
+            Date.Wed ->
+                (base - 3) % 7
 
-        Date.Thu ->
-            (base - 4) % 7
+            Date.Thu ->
+                (base - 4) % 7
 
-        Date.Fri ->
-            (base - 5) % 7
+            Date.Fri ->
+                (base - 5) % 7
 
-        Date.Sat ->
-            (base - 6) % 7
+            Date.Sat ->
+                (base - 6) % 7
 
 
 calculateNumberOfDaysForPreviousMonth : Int -> Int
@@ -118,7 +120,7 @@ generateCalendar firstDayOfWeek month year =
             List.range 1 14
                 |> List.map (Day Next)
     in
-    List.take 42 <| previousMonth ++ currentMonth ++ nextMonth
+        List.take 42 <| previousMonth ++ currentMonth ++ nextMonth
 
 
 toDateTime : Int -> Date.Month -> Day -> Int -> Int -> Date.Date
@@ -133,7 +135,7 @@ toDateTime year month day hour minute =
                     Date.Extra.Create.dateFromFields year month day.day hour minute 0 0
                         |> Date.Extra.Core.lastOfPrevMonthDate
             in
-            Date.Extra.Create.dateFromFields (Date.year previousMonth) (Date.month previousMonth) day.day hour minute 0 0
+                Date.Extra.Create.dateFromFields (Date.year previousMonth) (Date.month previousMonth) day.day hour minute 0 0
 
         Next ->
             let
@@ -141,7 +143,7 @@ toDateTime year month day hour minute =
                     Date.Extra.Create.dateFromFields year month day.day hour minute 0 0
                         |> Date.Extra.Core.firstOfNextMonthDate
             in
-            Date.Extra.Create.dateFromFields (Date.year nextMonth) (Date.month nextMonth) day.day hour minute 0 0
+                Date.Extra.Create.dateFromFields (Date.year nextMonth) (Date.month nextMonth) day.day hour minute 0 0
 
 
 toDate : Int -> Date.Month -> Day -> Date.Date
@@ -161,6 +163,18 @@ toTime hour minute amPm =
         0
 
 
+toTimeMilitary : Int -> Int -> Date.Date
+toTimeMilitary hour minute =
+    Date.Extra.Create.dateFromFields
+        0
+        Date.Jan
+        1
+        hour
+        minute
+        0
+        0
+
+
 setTime : Date.Date -> Int -> Int -> String -> Date.Date
 setTime date hour minute amPm =
     Date.Extra.Create.dateFromFields
@@ -168,6 +182,18 @@ setTime date hour minute amPm =
         (Date.month date)
         (Date.day date)
         (toMillitary hour amPm)
+        minute
+        0
+        0
+
+
+setTimeMilitary : Date.Date -> Int -> Int -> Date.Date
+setTimeMilitary date hour minute =
+    Date.Extra.Create.dateFromFields
+        (Date.year date)
+        (Date.month date)
+        (Date.day date)
+        hour
         minute
         0
         0

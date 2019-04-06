@@ -25,8 +25,16 @@ view dateConfig ( timeType, timeConfig ) state currentDate =
             -- to see if both a date and time have been picked
             dateConfig.onChange (InternalState state)
                 (case ( state.date, state.time.hour, state.time.minute, state.time.amPm ) of
-                    ( Just date, Just hour, Just minute, Just amPm ) ->
-                        Just <| DateTimePicker.DateUtils.setTime date hour minute amPm
+                    ( Just date, Just hour, Just minute, amPm ) ->
+                        if timeType == DigitalMilitary then
+                            Just <| DateTimePicker.DateUtils.setTimeMilitary date hour minute
+                        else
+                            case amPm of
+                                Just amPm_ ->
+                                    Just <| DateTimePicker.DateUtils.setTime date hour minute amPm_
+
+                                Nothing ->
+                                    Nothing
 
                     _ ->
                         Nothing
@@ -38,11 +46,14 @@ view dateConfig ( timeType, timeConfig ) state currentDate =
         safeTimeConfig =
             { timeConfig | onChange = safeOnChange }
     in
-    [ DatePickerPanel.view safeDateConfig state currentDate
-    , case timeType of
-        Digital ->
-            DigitalTimePickerPanel.view safeTimeConfig state currentDate
+        [ DatePickerPanel.view safeDateConfig state currentDate
+        , case timeType of
+            Digital ->
+                DigitalTimePickerPanel.view False safeTimeConfig state currentDate
 
-        Analog ->
-            AnalogTimePickerPanel.view safeTimeConfig state currentDate
-    ]
+            DigitalMilitary ->
+                DigitalTimePickerPanel.view True safeTimeConfig state currentDate
+
+            Analog ->
+                AnalogTimePickerPanel.view safeTimeConfig state currentDate
+        ]

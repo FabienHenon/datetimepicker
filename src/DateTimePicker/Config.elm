@@ -233,6 +233,7 @@ type alias TimePickerConfig =
 -}
 type TimePickerType
     = Digital
+    | DigitalMilitary
     | Analog
 
 
