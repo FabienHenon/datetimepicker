@@ -314,10 +314,10 @@ viewMilitary config ((InternalState stateValue) as state) currentDate =
             li [] [ text str ]
 
         hours =
-            List.range stateValue.hourPickerStart (stateValue.hourPickerStart + 6)
+            List.range stateValue.hourPickerStart (stateValue.hourPickerStart + 5)
 
         minutes =
-            List.range stateValue.minutePickerStart (stateValue.minutePickerStart + 6)
+            List.range stateValue.minutePickerStart (stateValue.minutePickerStart + 5)
 
         timeSelector =
             List.map2 toRow hours minutes
@@ -459,10 +459,10 @@ hourUpHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 hourUpHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.hourPickerStart - 6 >= 1 then
-                { state | hourPickerStart = state.hourPickerStart - 6 }
+            if state.hourPickerStart - 5 >= 0 then
+                { state | hourPickerStart = state.hourPickerStart - 5 }
             else
-                state
+                { state | hourPickerStart = 0 }
     in
         config.onChange (InternalState updatedState) currentDate
 
@@ -471,10 +471,10 @@ hourDownHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 hourDownHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.hourPickerStart + 6 <= 24 then
-                { state | hourPickerStart = state.hourPickerStart + 6 }
+            if state.hourPickerStart + 5 <= 23 then
+                { state | hourPickerStart = state.hourPickerStart + 5 }
             else
-                state
+                { state | hourPickerStart = 23 - 5 }
     in
         config.onChange (InternalState updatedState) currentDate
 
@@ -483,10 +483,10 @@ minuteUpHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 minuteUpHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.minutePickerStart - 6 >= 0 then
-                { state | minutePickerStart = state.minutePickerStart - 6 }
+            if state.minutePickerStart - 5 >= 0 then
+                { state | minutePickerStart = state.minutePickerStart - 5 }
             else
-                state
+                { state | minutePickerStart = 0 }
     in
         config.onChange (InternalState updatedState) currentDate
 
@@ -495,9 +495,9 @@ minuteDownHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 minuteDownHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.minutePickerStart + 6 <= 59 then
-                { state | minutePickerStart = state.minutePickerStart + 6 }
+            if state.minutePickerStart + 5 <= 59 then
+                { state | minutePickerStart = state.minutePickerStart + 5 }
             else
-                state
+                { state | minutePickerStart = 59 - 5 }
     in
         config.onChange (InternalState updatedState) currentDate
