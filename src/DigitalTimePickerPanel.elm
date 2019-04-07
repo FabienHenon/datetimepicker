@@ -471,7 +471,7 @@ hourDownHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 hourDownHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.hourPickerStart + 5 <= 23 then
+            if state.hourPickerStart + 5 * 2 <= 23 then
                 { state | hourPickerStart = state.hourPickerStart + 5 }
             else
                 { state | hourPickerStart = 23 - 5 }
@@ -495,7 +495,7 @@ minuteDownHandlerMilitary : Config a msg -> State -> Maybe Date.Date -> msg
 minuteDownHandlerMilitary config (InternalState state) currentDate =
     let
         updatedState =
-            if state.minutePickerStart + 5 <= 59 then
+            if state.minutePickerStart + 5 * 2 <= 59 then
                 { state | minutePickerStart = state.minutePickerStart + 5 }
             else
                 { state | minutePickerStart = 59 - 5 }
